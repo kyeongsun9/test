@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대중매체 속 가짜뉴스 비판적 검토 활동지</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-mid: #253459;
+    --blue: #2d5fa6;
+    --blue-light: #3d76cc;
+    --accent: #c8972a;
+    --accent-light: #f0c84a;
+    --cream: #f7f4ee;
+    --cream-dark: #ede8dc;
+    --red: #c0392b;
+    --text-dark: #1a1a2e;
+    --text-mid: #3a3a5c;
+    --text-light: #7a7a9a;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(26,39,68,0.13);
+    --shadow-lg: 0 8px 40px rgba(26,39,68,0.18);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(26,39,68,0.045) 39px, rgba(26,39,68,0.045) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(26,39,68,0.03) 39px, rgba(26,39,68,0.03) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── 상단 고정 헤더 ── */
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navy);
+    border-bottom: 3px solid var(--accent);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  }
+
+  .top-bar-label {
+    color: var(--accent-light);
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+  }
+
+  .top-bar input {
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(200,151,42,0.4);
+    border-radius: 6px;
+    color: var(--white);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    padding: 7px 12px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    width: 110px;
+  }
+  .top-bar input::placeholder { color: rgba(255,255,255,0.4); }
+  .top-bar input:focus {
+    border-color: var(--accent-light);
+    background: rgba(255,255,255,0.16);
+  }
+
+  .save-btn {
+    margin-left: auto;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    color: var(--navy);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 9px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    box-shadow: 0 3px 12px rgba(200,151,42,0.45);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .save-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(200,151,42,0.55); }
+  .save-btn:active { transform: translateY(0); }
+  .save-btn svg { flex-shrink: 0; }
+
+  .save-hint {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    width: 100%;
+    margin-top: -4px;
+    padding-left: 2px;
+  }
+
+  /* ── 메인 래퍼 ── */
+  #worksheet {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+
+  /* ── 타이틀 영역 ── */
+  .worksheet-header {
+    background: var(--navy);
+    border-radius: var(--radius);
+    padding: 32px 36px 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .worksheet-header::before {
+    content: '📰';
+    position: absolute;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 80px;
+    opacity: 0.07;
+  }
+  .achievement-tag {
+    display: inline-block;
+    background: rgba(200,151,42,0.18);
+    border: 1px solid rgba(200,151,42,0.5);
+    color: var(--accent-light);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+    margin-bottom: 14px;
+  }
+  .worksheet-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: clamp(20px, 4vw, 28px);
+    color: var(--white);
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .worksheet-title span {
+    color: var(--accent-light);
+  }
+  .worksheet-sub {
+    color: rgba(255,255,255,0.55);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .worksheet-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── 성취기준 배너 ── */
+  .achievement-banner {
+    background: linear-gradient(90deg, var(--blue) 0%, var(--navy-mid) 100%);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    box-shadow: var(--shadow);
+  }
+  .achievement-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .achievement-text {
+    color: rgba(255,255,255,0.92);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .achievement-text strong {
+    color: var(--accent-light);
+    font-weight: 700;
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── 섹션 공통 ── */
+  .section-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 2px solid var(--cream-dark);
+  }
+
+  .section-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: 15px;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+  .num-blue { background: var(--blue); }
+  .num-navy { background: var(--navy); }
+  .num-accent { background: var(--accent); }
+  .num-teal { background: #1a7a6e; }
+
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--navy);
+  }
+  .section-badge {
+    margin-left: auto;
+    font-size: 11px;
+    background: var(--cream-dark);
+    color: var(--text-mid);
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .section-body {
+    padding: 20px 22px;
+  }
+
+  /* ── 안내 박스 ── */
+  .info-box {
+    background: var(--cream);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.65;
+  }
+  .info-box.accent { border-color: var(--accent); }
+  .info-box.red { border-color: var(--red); background: #fff5f5; }
+
+  /* ── 판단 토글 ── */
+  .judgment-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .judgment-option {
+    position: relative;
+  }
+  .judgment-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0; height: 0;
+  }
+  .judgment-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 10px;
+    border-radius: 8px;
+    border: 2px solid var(--cream-dark);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-mid);
+    transition: all 0.2s;
+    background: var(--cream);
+    text-align: center;
+  }
+  .judgment-label:hover {
+    border-color: var(--blue-light);
+    background: #f0f5ff;
+  }
+  .judgment-option input[type="radio"]:checked + .judgment-label.true-label {
+    background: #e8f4e8;
+    border-color: #2d8a4e;
+    color: #1a5e30;
+  }
+  .judgment-option input[type="radio"]:checked + .judgment-label.false-label {
+    background: #fde8e8;
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .judgment-option input[type="radio"]:checked + .judgment-label.uncertain-label {
+    background: #fff8e8;
+    border-color: var(--accent);
+    color: #7a5a00;
+  }
+  .judgment-option input[type="radio"]:checked + .judgment-label.partly-label {
+    background: #e8f0ff;
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+
+  /* ── 입력 필드 ── */
+  .field-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .field-label::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 13px;
+    background: var(--blue);
+    border-radius: 2px;
+  }
+
+  textarea, .text-input {
+    width: 100%;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    color: var(--text-dark);
+    padding: 12px 14px;
+    outline: none;
+    resize: vertical;
+    background: var(--cream);
+    line-height: 1.7;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  textarea:focus, .text-input:focus {
+    border-color: var(--blue-light);
+    box-shadow: 0 0 0 3px rgba(45,95,166,0.1);
+    background: var(--white);
+  }
+  textarea::placeholder { color: var(--text-light); }
+
+  .field-group {
+    margin-bottom: 18px;
+  }
+  .field-group:last-child { margin-bottom: 0; }
+
+  /* ── 모둠원 그리드 ── */
+  .member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .member-card {
+    background: var(--cream);
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 10px;
+    padding: 14px;
+    transition: box-shadow 0.2s;
+  }
+  .member-card:hover { box-shadow: 0 2px 10px rgba(26,39,68,0.1); }
+  .member-name-input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid var(--cream-dark);
+    background: transparent;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    padding: 4px 2px 6px;
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .member-name-input:focus { border-color: var(--blue); }
+  .member-name-input::placeholder { color: var(--text-light); font-weight: 400; }
+
+  .member-judgment-select {
+    width: 100%;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 6px;
+    background: var(--white);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    padding: 5px 8px;
+    color: var(--text-dark);
+    outline: none;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+
+  .member-reason-input {
+    width: 100%;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    padding: 7px 10px;
+    color: var(--text-dark);
+    resize: none;
+    outline: none;
+    background: var(--white);
+    line-height: 1.5;
+    min-height: 60px;
+  }
+  .member-reason-input::placeholder { color: var(--text-light); }
+  .member-field-label {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  /* ── 모둠 합의 ── */
+  .consensus-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .consensus-item {
+    background: var(--cream);
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .consensus-item-label {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .consensus-item-value {
+    font-size: 22px;
+    font-weight: 900;
+    font-family: 'Noto Serif KR', serif;
+    color: var(--navy);
+  }
+  .count-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--cream-dark);
+    background: var(--white);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .count-btn:hover { background: var(--cream-dark); }
+  .count-row { display: flex; align-items: center; gap: 10px; justify-content: center; }
+
+  /* ── 기준 세우기 ── */
+  .criteria-list {
+    list-style: none;
+    counter-reset: criteria-counter;
+  }
+  .criteria-item {
+    counter-increment: criteria-counter;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .criteria-item::before {
+    content: counter(criteria-counter);
+    width: 26px;
+    height: 26px;
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .criteria-input {
+    flex: 1;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    padding: 10px 14px;
+    outline: none;
+    background: var(--cream);
+    min-height: 48px;
+    resize: vertical;
+    color: var(--text-dark);
+    line-height: 1.6;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .criteria-input:focus {
+    border-color: var(--blue-light);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(45,95,166,0.08);
+  }
+  .criteria-input::placeholder { color: var(--text-light); }
+
+  /* ── 최종 판정 박스 ── */
+  .final-verdict {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-top: 20px;
+    box-shadow: var(--shadow);
+  }
+  .final-verdict-title {
+    color: var(--accent-light);
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .verdict-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .verdict-radio {
+    position: relative;
+  }
+  .verdict-radio input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .verdict-radio-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 6px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.06);
+  }
+  .verdict-radio-label:hover {
+    border-color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+  }
+  .verdict-radio input:checked + .verdict-radio-label {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--navy);
+    box-shadow: 0 2px 12px rgba(200,151,42,0.4);
+  }
+
+  .final-reason-area {
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    color: var(--white);
+    padding: 12px 14px;
+    width: 100%;
+    outline: none;
+    resize: vertical;
+    min-height: 72px;
+    line-height: 1.7;
+  }
+  .final-reason-area::placeholder { color: rgba(255,255,255,0.35); }
+  .final-reason-area:focus {
+    border-color: var(--accent-light);
+    background: rgba(255,255,255,0.1);
+  }
+  .final-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  /* ── 구분선 ── */
+  .divider {
+    border: none;
+    border-top: 2px dashed var(--cream-dark);
+    margin: 20px 0;
+  }
+
+  /* ── 성찰 ── */
+  .reflection-box {
+    background: linear-gradient(135deg, #1a7a6e 0%, #1a5a52 100%);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+  }
+  .reflection-title {
+    color: #a8f0e8;
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .reflection-textarea {
+    background: rgba(255,255,255,0.09);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    color: var(--white);
+    padding: 12px 14px;
+    width: 100%;
+    outline: none;
+    resize: vertical;
+    min-height: 64px;
+    line-height: 1.7;
+  }
+  .reflection-textarea::placeholder { color: rgba(255,255,255,0.35); }
+  .reflection-textarea:focus {
+    border-color: #a8f0e8;
+    background: rgba(255,255,255,0.13);
+  }
+
+  /* ── 저장 안내 모달 ── */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--navy);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 13px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
+    z-index: 999;
+    border: 1px solid rgba(200,151,42,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 640px) {
+    .top-bar { gap: 8px; }
+    .top-bar input { width: 90px; font-size: 13px; }
+    .save-btn { font-size: 12px; padding: 8px 12px; }
+    .worksheet-header { padding: 22px 18px 20px; }
+    #worksheet { padding: 16px 10px 50px; }
+    .section-body { padding: 16px 14px; }
+    .section-header { padding: 13px 14px; }
+    .consensus-grid { grid-template-columns: 1fr 1fr; }
+    .member-grid { grid-template-columns: 1fr 1fr; }
+    .judgment-grid { grid-template-columns: 1fr 1fr; }
+    .verdict-options { gap: 7px; }
+    .verdict-radio-label { font-size: 12px; padding: 7px 11px; }
+  }
+  @media (max-width: 400px) {
+    .consensus-grid { grid-template-columns: 1fr; }
+    .member-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 상단 고정 헤더 -->
+<div class="top-bar">
+  <span class="top-bar-label">학번</span>
+  <input type="text" id="studentId" placeholder="예) 30101" maxlength="10">
+  <span class="top-bar-label">이름</span>
+  <input type="text" id="studentName" placeholder="홍길동" maxlength="10">
+  <button class="save-btn" onclick="saveImage()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    나의 활동지 이미지로 저장하기
+  </button>
+</div>
+
+<!-- 활동지 본문 -->
+<div id="worksheet">
+
+  <!-- 타이틀 -->
+  <div class="worksheet-header">
+    <div class="achievement-tag">📋 사회 모둠 활동지</div>
+    <div class="worksheet-title">대중매체 속 <span>가짜뉴스</span>,<br>비판적으로 검토해보자</div>
+    <div class="worksheet-sub">뉴스·SNS·유튜브 등 미디어에 넘쳐나는 정보, 정말 믿어도 될까요?<br>이 활동지와 함께 정보를 꼼꼼히 따져봅시다.</div>
+    <div class="worksheet-meta">
+      <div class="meta-chip">👥 모둠 토의 활동</div>
+      <div class="meta-chip">🕐 개인 판단 → 모둠 합의</div>
+    </div>
+  </div>
+
+  <!-- 성취기준 -->
+  <div class="achievement-banner">
+    <div class="achievement-icon">🎯</div>
+    <div class="achievement-text">
+      <strong>[9사(일사)02-02] 성취기준</strong>
+      우리 주변에서 활용되는 미디어들을 탐색하고, 미디어를 통해 경험하는 다양한 문화와 정보들을 <strong style="color:var(--accent-light); display:inline;">비판적으로 검토</strong>한다.
+    </div>
+  </div>
+
+  <!-- 분석 대상 뉴스 -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num num-blue">★</div>
+      <div class="section-title">오늘 분석할 뉴스·정보</div>
+      <span class="section-badge">교사 제시 / 모둠 선정</span>
+    </div>
+    <div class="section-body">
+      <div class="info-box accent">
+        💡 선생님께서 제시하신 뉴스 또는 모둠에서 선정한 정보를 아래에 정리해 보세요.
+      </div>
+      <div class="field-group">
+        <div class="field-label">뉴스 제목 / 정보 출처</div>
+        <textarea placeholder="예) ○○ 신문 [속보] 과학자들, 커피가 암을 유발한다는 연구 결과 발표 (2025.03.01)" rows="2"></textarea>
+      </div>
+      <div class="field-group">
+        <div class="field-label">주요 내용 요약</div>
+        <textarea placeholder="뉴스의 핵심 주장을 2~3문장으로 요약해 보세요." rows="3"></textarea>
+      </div>
+      <div class="field-group">
+        <div class="field-label">정보 출처 / 미디어 유형</div>
+        <textarea placeholder="예) 인터넷 기사 / SNS 공유 / 유튜브 영상 / 카카오톡 전달 등" rows="2"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 활동 1: 나의 판단 -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num num-blue">1</div>
+      <div class="section-title">나의 판단과 근거</div>
+      <span class="section-badge">🙋 개인 활동</span>
+    </div>
+    <div class="section-body">
+      <div class="info-box">
+        📌 모둠원과 이야기하기 전에 <strong>스스로</strong> 이 정보가 사실인지 판단해 보세요. 다른 사람의 의견에 흔들리지 마세요!
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">이 정보에 대한 나의 판단</div>
+        <div class="judgment-grid">
+          <div class="judgment-option">
+            <input type="radio" name="my_judgment" id="my_true" value="사실">
+            <label class="judgment-label true-label" for="my_true">✅ 사실이다</label>
+          </div>
+          <div class="judgment-option">
+            <input type="radio" name="my_judgment" id="my_false" value="가짜">
+            <label class="judgment-label false-label" for="my_false">❌ 가짜뉴스다</label>
+          </div>
+          <div class="judgment-option">
+            <input type="radio" name="my_judgment" id="my_partly" value="일부사실">
+            <label class="judgment-label partly-label" for="my_partly">⚠️ 일부만 사실</label>
+          </div>
+          <div class="judgment-option">
+            <input type="radio" name="my_judgment" id="my_uncertain" value="판단불가">
+            <label class="judgment-label uncertain-label" for="my_uncertain">❓ 판단하기 어렵다</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">판단의 근거 (왜 그렇게 생각하나요?)</div>
+        <textarea placeholder="예) 기사에 구체적인 연구 출처나 연구자 이름이 없어서 신뢰하기 어렵다고 생각했습니다. 또한..." rows="4"></textarea>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">판단하면서 의심스러웠던 부분</div>
+        <textarea placeholder="예) 통계 수치가 너무 극단적이었고, 반대 의견은 전혀 다루지 않았습니다." rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 활동 2: 모둠원 판단 공유 -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num num-navy">2</div>
+      <div class="section-title">모둠원의 판단과 근거 공유</div>
+      <span class="section-badge">👥 모둠 활동</span>
+    </div>
+    <div class="section-body">
+      <div class="info-box">
+        📢 모둠원 각자의 판단과 근거를 차례로 이야기해 보고, 아래에 정리해 보세요. (모둠원이 3명이면 3칸만 사용하세요)
+      </div>
+
+      <div class="member-grid">
+        <!-- 모둠원 1 -->
+        <div class="member-card">
+          <div class="member-field-label">모둠원 이름</div>
+          <input type="text" class="member-name-input" placeholder="이름 입력">
+          <div class="member-field-label">판단</div>
+          <select class="member-judgment-select">
+            <option value="">-- 선택 --</option>
+            <option>✅ 사실이다</option>
+            <option>❌ 가짜뉴스다</option>
+            <option>⚠️ 일부만 사실</option>
+            <option>❓ 판단하기 어렵다</option>
+          </select>
+          <div class="member-field-label">근거 요약</div>
+          <textarea class="member-reason-input" placeholder="핵심 근거를 적어보세요." rows="3"></textarea>
+        </div>
+        <!-- 모둠원 2 -->
+        <div class="member-card">
+          <div class="member-field-label">모둠원 이름</div>
+          <input type="text" class="member-name-input" placeholder="이름 입력">
+          <div class="member-field-label">판단</div>
+          <select class="member-judgment-select">
+            <option value="">-- 선택 --</option>
+            <option>✅ 사실이다</option>
+            <option>❌ 가짜뉴스다</option>
+            <option>⚠️ 일부만 사실</option>
+            <option>❓ 판단하기 어렵다</option>
+          </select>
+          <div class="member-field-label">근거 요약</div>
+          <textarea class="member-reason-input" placeholder="핵심 근거를 적어보세요." rows="3"></textarea>
+        </div>
+        <!-- 모둠원 3 -->
+        <div class="member-card">
+          <div class="member-field-label">모둠원 이름</div>
+          <input type="text" class="member-name-input" placeholder="이름 입력">
+          <div class="member-field-label">판단</div>
+          <select class="member-judgment-select">
+            <option value="">-- 선택 --</option>
+            <option>✅ 사실이다</option>
+            <option>❌ 가짜뉴스다</option>
+            <option>⚠️ 일부만 사실</option>
+            <option>❓ 판단하기 어렵다</option>
+          </select>
+          <div class="member-field-label">근거 요약</div>
+          <textarea class="member-reason-input" placeholder="핵심 근거를 적어보세요." rows="3"></textarea>
+        </div>
+        <!-- 모둠원 4 -->
+        <div class="member-card">
+          <div class="member-field-label">모둠원 이름</div>
+          <input type="text" class="member-name-input" placeholder="이름 입력">
+          <div class="member-field-label">판단</div>
+          <select class="member-judgment-select">
+            <option value="">-- 선택 --</option>
+            <option>✅ 사실이다</option>
+            <option>❌ 가짜뉴스다</option>
+            <option>⚠️ 일부만 사실</option>
+            <option>❓ 판단하기 어렵다</option>
+          </select>
+          <div class="member-field-label">근거 요약</div>
+          <textarea class="member-reason-input" placeholder="핵심 근거를 적어보세요." rows="3"></textarea>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="field-group">
+        <div class="field-label">모둠원 의견 중 가장 설득력 있었던 근거</div>
+        <textarea placeholder="누구의 어떤 근거가 가장 논리적이었나요? 이유도 함께 적어보세요." rows="3"></textarea>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">의견이 달랐던 부분과 그 이유</div>
+        <textarea placeholder="모둠원들 사이에서 판단이 갈렸던 부분은 무엇이었나요?" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 활동 3: 모둠 합의 -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num num-accent">3</div>
+      <div class="section-title">모둠 합의</div>
+      <span class="section-badge">🤝 최종 결정</span>
+    </div>
+    <div class="section-body">
+      <div class="info-box accent">
+        🗳️ 모둠원들이 충분히 토의한 후, 최종적으로 합의한 내용을 정리해 보세요.
+      </div>
+
+      <!-- 의견 집계 -->
+      <div class="field-label" style="margin-bottom:12px;">모둠원 판단 집계</div>
+      <div class="consensus-grid">
+        <div class="consensus-item">
+          <div class="consensus-item-label">✅ 사실이다</div>
+          <div class="count-row">
+            <button class="count-btn" onclick="changeCount('cnt1',-1)">−</button>
+            <div class="consensus-item-value" id="cnt1">0</div>
+            <button class="count-btn" onclick="changeCount('cnt1',1)">+</button>
+          </div>
+          <div class="consensus-item-label" style="margin-top:4px;">명</div>
+        </div>
+        <div class="consensus-item">
+          <div class="consensus-item-label">❌ 가짜뉴스</div>
+          <div class="count-row">
+            <button class="count-btn" onclick="changeCount('cnt2',-1)">−</button>
+            <div class="consensus-item-value" id="cnt2">0</div>
+            <button class="count-btn" onclick="changeCount('cnt2',1)">+</button>
+          </div>
+          <div class="consensus-item-label" style="margin-top:4px;">명</div>
+        </div>
+        <div class="consensus-item">
+          <div class="consensus-item-label">⚠️ 일부만 사실</div>
+          <div class="count-row">
+            <button class="count-btn" onclick="changeCount('cnt3',-1)">−</button>
+            <div class="consensus-item-value" id="cnt3">0</div>
+            <button class="count-btn" onclick="changeCount('cnt3',1)">+</button>
+          </div>
+          <div class="consensus-item-label" style="margin-top:4px;">명</div>
+        </div>
+      </div>
+
+      <!-- 최종 판정 -->
+      <div class="final-verdict">
+        <div class="final-verdict-title">⚖️ 모둠 최종 판정</div>
+        <div class="verdict-options">
+          <div class="verdict-radio">
+            <input type="radio" name="final_verdict" id="v1" value="사실">
+            <label class="verdict-radio-label" for="v1">✅ 사실이다</label>
+          </div>
+          <div class="verdict-radio">
+            <input type="radio" name="final_verdict" id="v2" value="가짜">
+            <label class="verdict-radio-label" for="v2">❌ 가짜뉴스다</label>
+          </div>
+          <div class="verdict-radio">
+            <input type="radio" name="final_verdict" id="v3" value="일부">
+            <label class="verdict-radio-label" for="v3">⚠️ 일부만 사실</label>
+          </div>
+          <div class="verdict-radio">
+            <input type="radio" name="final_verdict" id="v4" value="불가">
+            <label class="verdict-radio-label" for="v4">❓ 판단 보류</label>
+          </div>
+        </div>
+        <div class="final-label">최종 판정의 주요 근거</div>
+        <textarea class="final-reason-area" placeholder="모둠이 이 판정에 동의하게 된 핵심 이유를 적어보세요. 어떤 증거나 논리가 결정적이었나요?" rows="4"></textarea>
+      </div>
+
+      <div class="field-group" style="margin-top:18px;">
+        <div class="field-label">토의 과정에서 가장 어려웠던 점</div>
+        <textarea placeholder="예) 출처를 확인할 방법이 없어서 사실 여부를 판단하기 어려웠습니다." rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 활동 4: 비판적 검토 기준 -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num num-teal">4</div>
+      <div class="section-title">비판적 검토 기준 세우기</div>
+      <span class="section-badge">💡 핵심 정리</span>
+    </div>
+    <div class="section-body">
+      <div class="info-box red">
+        🔍 오늘 토의를 바탕으로, <strong>앞으로 미디어 정보를 접했을 때 비판적으로 검토하기 위한 나만의 기준</strong>을 만들어 봅시다.<br>
+        <span style="font-size:12px; color:var(--text-light);">최소 3가지 이상 작성해 보세요.</span>
+      </div>
+
+      <ul class="criteria-list">
+        <li class="criteria-item">
+          <textarea class="criteria-input" placeholder="예) 정보의 출처(언론사, 기관, 개인)가 신뢰할 수 있는 곳인지 확인한다." rows="2"></textarea>
+        </li>
+        <li class="criteria-item">
+          <textarea class="criteria-input" placeholder="예) 제목과 본문 내용이 일치하는지, 과장된 표현이 없는지 살펴본다." rows="2"></textarea>
+        </li>
+        <li class="criteria-item">
+          <textarea class="criteria-input" placeholder="예) 통계나 수치가 제시될 때 어디서 나온 자료인지 근거를 확인한다." rows="2"></textarea>
+        </li>
+        <li class="criteria-item">
+          <textarea class="criteria-input" placeholder="예) 반대 의견이나 다른 시각도 함께 검색해서 비교해 본다." rows="2"></textarea>
+        </li>
+        <li class="criteria-item">
+          <textarea class="criteria-input" placeholder="추가 기준을 자유롭게 작성해 보세요." rows="2"></textarea>
+        </li>
+      </ul>
+
+      <hr class="divider">
+
+      <!-- 성찰 -->
+      <div class="reflection-box">
+        <div class="reflection-title">🌱 오늘 활동을 통해 배운 점 / 느낀 점</div>
+        <textarea class="reflection-textarea" placeholder="이번 모둠 토의를 통해 미디어 정보를 대하는 태도가 어떻게 바뀌었나요? 앞으로 정보를 접할 때 어떻게 달라질 것 같나요?" rows="4"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 자기 평가 -->
+  <div class="section-card" style="margin-bottom:0;">
+    <div class="section-header">
+      <div class="section-num num-blue">✔</div>
+      <div class="section-title">자기 평가</div>
+      <span class="section-badge">스스로 점검</span>
+    </div>
+    <div class="section-body">
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="field-group" style="margin-bottom:0;">
+          <div class="field-label">나는 근거를 들어 판단하였다</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self1" style="accent-color:var(--blue)"> ⭐⭐⭐ 매우 잘함</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self1" style="accent-color:var(--blue)"> ⭐⭐ 잘함</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self1" style="accent-color:var(--blue)"> ⭐ 보통</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self1" style="accent-color:var(--blue)"> 노력 필요</label>
+          </div>
+        </div>
+        <hr class="divider" style="margin:4px 0;">
+        <div class="field-group" style="margin-bottom:0;">
+          <div class="field-label">나는 모둠 토의에 적극적으로 참여하였다</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self2" style="accent-color:var(--blue)"> ⭐⭐⭐ 매우 잘함</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self2" style="accent-color:var(--blue)"> ⭐⭐ 잘함</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self2" style="accent-color:var(--blue)"> ⭐ 보통</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self2" style="accent-color:var(--blue)"> 노력 필요</label>
+          </div>
+        </div>
+        <hr class="divider" style="margin:4px 0;">
+        <div class="field-group" style="margin-bottom:0;">
+          <div class="field-label">나는 비판적 검토 기준을 구체적으로 세웠다</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self3" style="accent-color:var(--blue)"> ⭐⭐⭐ 매우 잘함</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self3" style="accent-color:var(--blue)"> ⭐⭐ 잘함</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self3" style="accent-color:var(--blue)"> ⭐ 보통</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="radio" name="self3" style="accent-color:var(--blue)"> 노력 필요</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#worksheet -->
+
+<!-- 토스트 알림 -->
+<div class="toast" id="toast"></div>
+
+<script>
+  function changeCount(id, delta) {
+    const el = document.getElementById(id);
+    const val = Math.max(0, parseInt(el.textContent) + delta);
+    el.textContent = val;
+  }
+
+  function showToast(msg, duration = 3000) {
+    const toast = document.getElementById('toast');
+    toast.innerHTML = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), duration);
+  }
+
+  async function saveImage() {
+    const sid = document.getElementById('studentId').value.trim();
+    const sname = document.getElementById('studentName').value.trim();
+
+    if (!sid || !sname) {
+      showToast('⚠️ 학번과 이름을 먼저 입력해 주세요!');
+      document.getElementById('studentId').focus();
+      return;
+    }
+
+    showToast('📸 활동지를 이미지로 변환 중입니다...', 8000);
+
+    const worksheet = document.getElementById('worksheet');
+    const topBar = document.querySelector('.top-bar');
+
+    // 저장 전 상단 바 잠시 숨기기 (워크시트만 캡처)
+    const prevDisplay = topBar.style.display;
+    topBar.style.display = 'none';
+    // 학번/이름 워터마크 추가
+    const watermark = document.createElement('div');
+    watermark.style.cssText = `
+      position: absolute; top: 0; right: 0;
+      background: #1a2744; color: #f0c84a;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 12px; font-weight: 700;
+      padding: 6px 14px; border-radius: 0 12px 0 10px;
+      z-index: 50; letter-spacing: 0.5px;
+    `;
+    watermark.textContent = `${sid} · ${sname}`;
+    worksheet.style.position = 'relative';
+    worksheet.appendChild(watermark);
+
+    try {
+      const canvas = await html2canvas(worksheet, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#f7f4ee',
+        scrollY: 0,
+        windowWidth: worksheet.scrollWidth,
+        logging: false
+      });
+
+      const link = document.createElement('a');
+      link.download = `대중매체_${sid}_${sname}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+      showToast('✅ 저장 완료! 다운로드 폴더를 확인해 보세요.');
+    } catch (err) {
+      showToast('❌ 저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      console.error(err);
+    } finally {
+      topBar.style.display = prevDisplay;
+      if (worksheet.contains(watermark)) worksheet.removeChild(watermark);
+    }
+  }
+</script>
+</body>
+</html>
